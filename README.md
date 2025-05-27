@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 Goal日历 - AI智能目标管理系统
 
-## Getting Started
+## 项目简介
 
-First, run the development server:
+Goal日历是一个基于Next.js构建的智能目标管理系统，使用AI技术将用户的长期目标科学分解为可执行的日常计划，并通过可视化日历进行进度跟踪。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ 核心功能
+
+### 🤖 AI智能分解
+- 用户输入目标描述和基本参数
+- AI算法自动分解为阶段性任务
+- 科学的学习曲线和时间分配
+- 智能生成每日具体执行计划
+
+### 📅 智能日历
+- 可视化万年历界面
+- 任务密度热力图显示
+- 多种任务类型标识
+- 月视图/日视图切换
+
+### 📊 进度跟踪
+- 实时任务完成状态
+- 关键里程碑提醒
+- 学习进度可视化
+- 智能调整建议
+
+## 🛠️ 技术栈
+
+- **前端框架**: Next.js 15 (App Router)
+- **开发语言**: TypeScript
+- **样式框架**: Tailwind CSS
+- **组件库**: Radix UI
+- **日期处理**: date-fns
+- **图标库**: Lucide React
+- **工具库**: class-variance-authority, clsx, tailwind-merge
+
+## 📋 项目结构
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── layout.tsx         # 全局布局
+│   ├── page.tsx           # 主页面
+│   └── globals.css        # 全局样式
+├── components/            # React组件
+│   ├── ui/               # 基础UI组件
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   └── input.tsx
+│   ├── goal-input-form.tsx    # 目标输入表单
+│   └── goal-calendar.tsx      # 日历组件
+├── lib/                   # 工具库
+│   ├── utils.ts          # 通用工具函数
+│   └── ai-service.ts     # AI服务接口
+└── types/                # TypeScript类型定义
+    └── goal.ts           # 目标相关类型
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 快速开始
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. 安装依赖
+```bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. 启动开发服务器
+```bash
+npm run dev
+```
 
-## Learn More
+### 3. 访问应用
+打开浏览器访问 [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## 💡 使用说明
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. 目标设定
+- 输入具体的目标描述
+- 选择或自定义实现周期
+- 设置开始日期和每日可用时间
+- 选择目标优先级
+- 添加详细描述（可选）
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. AI计划生成
+- 点击"生成AI目标计划"按钮
+- AI会自动分解目标为多个阶段
+- 每个阶段包含具体的任务和时间安排
+- 自动生成每日执行计划
 
-## Deploy on Vercel
+### 3. 日历管理
+- 查看月度日历视图
+- 点击日期查看当日详细任务
+- 标记任务完成状态
+- 跟踪学习进度
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔧 开发说明
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 类型系统
+项目使用TypeScript提供完整的类型安全，核心类型定义在 `src/types/goal.ts` 中。
+
+### AI服务
+当前使用模拟数据进行演示，实际部署时需要集成真实的AI API服务。
+
+### 样式系统
+使用Tailwind CSS提供响应式设计和现代化UI风格。
+
+### 组件架构
+采用组合式组件设计，便于维护和扩展。
+
+## 📈 未来规划
+
+- [ ] 集成真实AI API (OpenAI/Claude)
+- [ ] 用户账户系统
+- [ ] 数据持久化存储
+- [ ] 移动端适配
+- [ ] 多目标管理
+- [ ] 社交分享功能
+- [ ] 数据分析报告
+- [ ] 智能提醒系统
+
+## 🎨 设计理念
+
+### 用户体验优先
+- 简洁直观的界面设计
+- 流畅的交互体验
+- 智能的默认设置
+
+### 科学性
+- 基于认知科学的学习规律
+- 合理的时间分配算法
+- 循序渐进的难度设计
+
+### 个性化
+- 根据用户习惯调整计划
+- 灵活的时间安排
+- 自定义目标类型
+
+## 📄 许可证
+
+本项目采用 MIT 许可证。
+
+## 🤝 贡献
+
+欢迎提交Issue和Pull Request来帮助改进项目！
+
+---
+
+**Goal日历 - 让每个目标都变得可执行** 🚀
