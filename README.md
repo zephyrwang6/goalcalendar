@@ -1,147 +1,114 @@
-# 🎯 Goal日历 - AI智能目标管理系统
+# Goal日历 - AI驱动的目标管理系统
 
-## 项目简介
+一个基于Next.js和DeepSeek AI的智能目标管理应用，帮助用户将大目标科学分解为可执行的日常计划。
 
-Goal日历是一个基于Next.js构建的智能目标管理系统，使用AI技术将用户的长期目标科学分解为可执行的日常计划，并通过可视化日历进行进度跟踪。
+## 🚀 特性
 
-## ✨ 核心功能
-
-### 🤖 AI智能分解
-- 用户输入目标描述和基本参数
-- AI算法自动分解为阶段性任务
-- 科学的学习曲线和时间分配
-- 智能生成每日具体执行计划
-
-### 📅 智能日历
-- 可视化万年历界面
-- 任务密度热力图显示
-- 多种任务类型标识
-- 月视图/日视图切换
-
-### 📊 进度跟踪
-- 实时任务完成状态
-- 关键里程碑提醒
-- 学习进度可视化
-- 智能调整建议
+- **AI智能规划**: 使用DeepSeek API自动将目标分解为具体的执行计划
+- **可视化日历**: 直观显示目标进度和日常任务安排
+- **科学分解**: 将长期目标拆分为阶段性任务和里程碑
+- **现代界面**: 基于Tailwind CSS的美观响应式设计
+- **TypeScript**: 完全的类型安全支持
 
 ## 🛠️ 技术栈
 
-- **前端框架**: Next.js 15 (App Router)
-- **开发语言**: TypeScript
-- **样式框架**: Tailwind CSS
-- **组件库**: Radix UI
-- **日期处理**: date-fns
-- **图标库**: Lucide React
-- **工具库**: class-variance-authority, clsx, tailwind-merge
+- **前端框架**: Next.js 14 (App Router)
+- **UI库**: Tailwind CSS + Lucide React Icons
+- **类型安全**: TypeScript
+- **AI服务**: DeepSeek API
+- **状态管理**: React Hooks
 
-## 📋 项目结构
+## 📦 安装和运行
 
-```
-src/
-├── app/                    # Next.js App Router
-│   ├── layout.tsx         # 全局布局
-│   ├── page.tsx           # 主页面
-│   └── globals.css        # 全局样式
-├── components/            # React组件
-│   ├── ui/               # 基础UI组件
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   └── input.tsx
-│   ├── goal-input-form.tsx    # 目标输入表单
-│   └── goal-calendar.tsx      # 日历组件
-├── lib/                   # 工具库
-│   ├── utils.ts          # 通用工具函数
-│   └── ai-service.ts     # AI服务接口
-└── types/                # TypeScript类型定义
-    └── goal.ts           # 目标相关类型
+### 克隆项目
+```bash
+git clone https://github.com/zephyrwang6/goalcalendar.git
+cd goalcalendar
 ```
 
-## 🚀 快速开始
-
-### 1. 安装依赖
+### 安装依赖
 ```bash
 npm install
 ```
 
-### 2. 启动开发服务器
+### 配置环境变量
+在项目根目录创建 `.env.local` 文件：
+```env
+DEEPSEEK_API_KEY=your_deepseek_api_key_here
+```
+
+### 启动开发服务器
 ```bash
 npm run dev
 ```
 
-### 3. 访问应用
-打开浏览器访问 [http://localhost:3000](http://localhost:3000)
+访问 [http://localhost:3000](http://localhost:3000) 查看应用。
 
-## 💡 使用说明
+## 🎯 功能介绍
 
 ### 1. 目标设定
-- 输入具体的目标描述
-- 选择或自定义实现周期
-- 设置开始日期和每日可用时间
-- 选择目标优先级
-- 添加详细描述（可选）
+- 输入目标描述
+- 选择实现周期（1个月/3个月/6个月或自定义）
+- 设置开始日期
+- 选择每日可用时间
+- 添加详细描述
 
-### 2. AI计划生成
-- 点击"生成AI目标计划"按钮
-- AI会自动分解目标为多个阶段
-- 每个阶段包含具体的任务和时间安排
-- 自动生成每日执行计划
+### 2. AI智能规划
+系统会自动：
+- 将目标分解为多个阶段
+- 为每个阶段制定具体任务
+- 安排日程表和时间分配
+- 设置重要里程碑
 
-### 3. 日历管理
-- 查看月度日历视图
-- 点击日期查看当日详细任务
-- 标记任务完成状态
-- 跟踪学习进度
+### 3. 日历视图
+- 可视化显示每日任务
+- 跟踪完成进度
+- 查看里程碑达成情况
 
-## 🔧 开发说明
+## 🔧 API配置
 
-### 类型系统
-项目使用TypeScript提供完整的类型安全，核心类型定义在 `src/types/goal.ts` 中。
+本项目使用DeepSeek API进行AI规划。请确保：
 
-### AI服务
-当前使用模拟数据进行演示，实际部署时需要集成真实的AI API服务。
+1. 注册DeepSeek账号并获取API密钥
+2. 在 `src/lib/ai-service.ts` 中配置正确的API密钥
+3. 确保网络可以访问 `https://api.deepseek.com`
 
-### 样式系统
-使用Tailwind CSS提供响应式设计和现代化UI风格。
+## 📁 项目结构
 
-### 组件架构
-采用组合式组件设计，便于维护和扩展。
+```
+goalcalendar/
+├── src/
+│   ├── app/                 # Next.js App Router页面
+│   ├── components/          # React组件
+│   │   ├── ui/             # 基础UI组件
+│   │   └── goal-input-form.tsx
+│   ├── lib/                # 工具库
+│   │   ├── ai-service.ts   # AI服务集成
+│   │   └── utils.ts        # 工具函数
+│   └── types/              # TypeScript类型定义
+│       └── goal.ts
+├── public/                 # 静态资源
+└── README.md
+```
 
-## 📈 未来规划
+## 🎨 样式说明
 
-- [ ] 集成真实AI API (OpenAI/Claude)
-- [ ] 用户账户系统
-- [ ] 数据持久化存储
-- [ ] 移动端适配
-- [ ] 多目标管理
-- [ ] 社交分享功能
-- [ ] 数据分析报告
-- [ ] 智能提醒系统
-
-## 🎨 设计理念
-
-### 用户体验优先
-- 简洁直观的界面设计
-- 流畅的交互体验
-- 智能的默认设置
-
-### 科学性
-- 基于认知科学的学习规律
-- 合理的时间分配算法
-- 循序渐进的难度设计
-
-### 个性化
-- 根据用户习惯调整计划
-- 灵活的时间安排
-- 自定义目标类型
-
-## 📄 许可证
-
-本项目采用 MIT 许可证。
+项目使用Tailwind CSS进行样式设计，包含：
+- 响应式布局
+- 渐变背景和文字效果
+- 现代化的卡片设计
+- 交互式按钮和表单元素
 
 ## 🤝 贡献
 
-欢迎提交Issue和Pull Request来帮助改进项目！
+欢迎提交Issue和Pull Request来改进这个项目！
 
----
+## 📄 许可证
 
-**Goal日历 - 让每个目标都变得可执行** 🚀
+MIT License
+
+## 🔗 相关链接
+
+- [DeepSeek API文档](https://platform.deepseek.com/api-docs/)
+- [Next.js文档](https://nextjs.org/docs)
+- [Tailwind CSS文档](https://tailwindcss.com/docs)
