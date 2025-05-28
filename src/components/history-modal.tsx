@@ -3,19 +3,28 @@ import { GoalPlan } from '@/types/goal'
 import { Button } from '@/components/ui/button'
 import { X, Calendar, Clock } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 
 interface HistoryModalProps {
   isOpen: boolean
   onClose: () => void
   historyPlans: GoalPlan[]
-  onSelectPlan: (plan: GoalPlan) => void
+  onSelectPlan?: (plan: GoalPlan) => void
 }
 
 export function HistoryModal({ isOpen, onClose, historyPlans, onSelectPlan }: HistoryModalProps) {
+  const router = useRouter()
+  
   if (!isOpen) return null
 
   const handleSelectPlan = (plan: GoalPlan) => {
-    onSelectPlan(plan)
+    if (onSelectPlan) {
+      // 如果提供了onSelectPlan回调，使用它
+      onSelectPlan(plan)
+    } else {
+      // 否则跳转到独立的计划页面
+      router.push(`/plan/${plan.goalId}`)
+    }
     onClose()
   }
 

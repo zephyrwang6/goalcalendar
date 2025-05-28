@@ -4,14 +4,18 @@ import { Button } from '@/components/ui/button'
 
 interface NavbarProps {
   onHistoryClick?: () => void
+  onLogoClick?: () => void
 }
 
-export function Navbar({ onHistoryClick }: NavbarProps) {
+export function Navbar({ onHistoryClick, onLogoClick }: NavbarProps) {
   return (
     <nav className="w-full bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
       <div className="container mx-auto flex items-center justify-between">
         {/* 左侧 Logo */}
-        <div className="flex items-center gap-2">
+        <div 
+          className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+          onClick={onLogoClick}
+        >
           <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
             <Target className="w-5 h-5 text-white" />
           </div>
