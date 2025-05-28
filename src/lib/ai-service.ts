@@ -4,6 +4,37 @@ import { generateId } from './utils'
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions'
 const DEEPSEEK_API_KEY = 'sk-c2c2c6ee4c8748348aec7ef1594549aa'
 
+// 添加AI响应的类型定义
+interface AIResponse {
+  goalTitle?: string
+  totalDuration?: string
+  phases?: Array<{
+    phaseId: string
+    phaseName: string
+    duration: string
+    tasks: Array<{
+      taskId: string
+      title: string
+      description: string
+      estimatedHours: number
+      dailySchedule: Array<{
+        date: string
+        timeSlot: string
+        content: string
+        type: 'study' | 'practice' | 'review' | 'project' | 'milestone'
+        duration: number
+        completed: boolean
+      }>
+    }>
+  }>
+  milestones?: Array<{
+    date: string
+    title: string
+    description: string
+    completed: boolean
+  }>
+}
+
 export async function generateGoalPlan(goalInput: GoalInput): Promise<GoalPlan> {
   try {
     const prompt = `
@@ -107,10 +138,10 @@ JSON格式要求（严格按照此格式）：
     }
 
     // 尝试解析JSON响应
-    let aiPlan: any
+    let aiPlan: AIResponse
     try {
       // 清理可能的markdown代码块标记
-      let cleanContent = content.replace(/```json\s*|\s*```/g, '').trim()
+      const cleanContent = content.replace(/```json\s*|\s*```/g, '').trim()
       
       // 检查JSON是否被截断（如果以逗号或不完整的结构结尾）
       if (!cleanContent.endsWith('}')) {
@@ -119,7 +150,7 @@ JSON格式要求（严格按照此格式）：
         throw new Error('AI返回的JSON内容被截断，请稍后重试')
       }
       
-      aiPlan = JSON.parse(cleanContent)
+      aiPlan = JSON.parse(cleanContent) as AIResponse
       
       // 验证必要的字段
       if (!aiPlan.goalTitle || !aiPlan.phases || !Array.isArray(aiPlan.phases)) {
