@@ -144,29 +144,29 @@ export function GoalInputForm({ onSubmit, isLoading = false }: GoalInputFormProp
     <div className="w-full max-w-2xl mx-auto">
       {/* 问候文案 */}
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-gray-900 mb-2">
+        <h1 className="text-2xl md:text-2xl font-medium text-gray-900 mb-2">
           {getGreeting()}，你想制定什么计划？
         </h1>
-        <p className="text-base text-gray-500">
+        <p className="text-base text-gray-600">
           让AI帮你制定切实可行的日常任务
         </p>
       </div>
       
-      <div className="bg-white rounded-lg p-8 shadow-sm">
-        <div className="space-y-8">
-          <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="bg-white rounded-lg p-4 md:p-8 shadow-sm">
+        <div className="space-y-6 md:space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
             {/* 目标描述 */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-base font-medium text-gray-800 flex items-center gap-2">
-                  <Target className="w-4 h-4 text-gray-600" />
+                <label className="text-base font-medium text-gray-900 flex items-center gap-2">
+                  <Target className="w-4 h-4 text-gray-700" />
                   目标描述
                 </label>
                 <Button
                   type="button"
                   variant="ghost"
                   onClick={handleRandomPlan}
-                  className="h-8 px-3 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 flex items-center gap-1"
+                  className="h-8 px-3 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1"
                 >
                   <Shuffle className="w-3 h-3" />
                   随机
@@ -176,18 +176,19 @@ export function GoalInputForm({ onSubmit, isLoading = false }: GoalInputFormProp
                 placeholder="例如：学会Python编程、掌握英语口语、减肥20斤等"
                 value={formData.goal}
                 onChange={(e) => handleInputChange('goal', e.target.value)}
-                className="h-12 border-0 border-b-2 border-gray-200 rounded-none focus:border-black focus:ring-0 text-lg bg-transparent px-0 placeholder:text-gray-400"
+                className="h-12 border-0 border-b-2 border-gray-300 rounded-none focus:border-gray-900 focus:ring-0 text-lg bg-transparent px-0 placeholder:text-gray-500"
                 required
               />
             </div>
 
             {/* 时间周期 */}
             <div className="space-y-3">
-              <label className="text-base font-medium text-gray-800 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-gray-600" />
+              <label className="text-base font-medium text-gray-900 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-gray-700" />
                 实现周期
+                <span className="text-sm text-gray-400">周</span>
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <div className="grid grid-cols-3 gap-2 flex-1">
                   {['1个月', '3个月', '6个月'].map((period) => (
                     <Button
@@ -197,8 +198,8 @@ export function GoalInputForm({ onSubmit, isLoading = false }: GoalInputFormProp
                       onClick={() => handleInputChange('timeframe', period)}
                       className={`h-10 text-sm font-medium rounded-md transition-all ${
                         formData.timeframe === period 
-                          ? 'bg-black text-white hover:bg-gray-800' 
-                          : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                          ? 'bg-gray-900 text-white hover:bg-gray-800' 
+                          : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300'
                       }`}
                     >
                       {period}
@@ -209,33 +210,34 @@ export function GoalInputForm({ onSubmit, isLoading = false }: GoalInputFormProp
                   placeholder="自定义时间"
                   value={formData.timeframe.includes('个月') ? '' : formData.timeframe}
                   onChange={(e) => handleInputChange('timeframe', e.target.value)}
-                  className="h-10 border border-gray-200 rounded-md focus:border-black focus:ring-0 bg-white px-3 placeholder:text-gray-400 flex-1"
+                  className="h-10 border border-gray-300 rounded-md focus:border-gray-900 focus:ring-0 bg-white px-3 placeholder:text-gray-500 flex-1 text-gray-900"
                 />
               </div>
             </div>
 
             {/* 开始日期 */}
             <div className="space-y-3">
-              <label className="text-base font-medium text-gray-800 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-gray-600" />
+              <label className="text-base font-medium text-gray-900 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-gray-700" />
                 开始日期
               </label>
               <Input
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => handleInputChange('startDate', e.target.value)}
-                className="h-12 border-0 border-b-2 border-gray-200 rounded-none focus:border-black focus:ring-0 text-lg bg-transparent px-0"
+                className="h-12 border-0 border-b-2 border-gray-300 rounded-none focus:border-gray-900 focus:ring-0 text-lg bg-transparent px-0 text-gray-900"
                 required
               />
             </div>
 
             {/* 每日可用时间 */}
             <div className="space-y-3">
-              <label className="text-base font-medium text-gray-800 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-gray-600" />
+              <label className="text-base font-medium text-gray-900 flex items-center gap-2">
+                <Clock className="w-4 h-4 text-gray-700" />
                 每日可用时间
+                <span className="text-sm text-gray-400">小时</span>
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <div className="grid grid-cols-3 gap-2 flex-1">
                   {['1小时', '2小时', '3小时'].map((time) => (
                     <Button
@@ -245,8 +247,8 @@ export function GoalInputForm({ onSubmit, isLoading = false }: GoalInputFormProp
                       onClick={() => handleInputChange('dailyTimeAvailable', time)}
                       className={`h-10 text-sm font-medium rounded-md transition-all ${
                         formData.dailyTimeAvailable === time 
-                          ? 'bg-black text-white hover:bg-gray-800' 
-                          : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                          ? 'bg-gray-900 text-white hover:bg-gray-800' 
+                          : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300'
                       }`}
                     >
                       {time}
@@ -257,21 +259,21 @@ export function GoalInputForm({ onSubmit, isLoading = false }: GoalInputFormProp
                   placeholder="自定义时间"
                   value={formData.dailyTimeAvailable.includes('小时') ? '' : formData.dailyTimeAvailable}
                   onChange={(e) => handleInputChange('dailyTimeAvailable', e.target.value)}
-                  className="h-10 border border-gray-200 rounded-md focus:border-black focus:ring-0 bg-white px-3 placeholder:text-gray-400 flex-1"
+                  className="h-10 border border-gray-300 rounded-md focus:border-gray-900 focus:ring-0 bg-white px-3 placeholder:text-gray-500 flex-1 text-gray-900"
                 />
               </div>
             </div>
 
             {/* 详细描述 */}
             <div className="space-y-3">
-              <label className="text-base font-medium text-gray-800">
+              <label className="text-base font-medium text-gray-900">
                 详细描述（可选）
               </label>
               <textarea
                 placeholder="描述您的具体需求、背景或期望达到的效果..."
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
-                className="w-full h-16 px-0 py-2 border-0 border-b-2 border-gray-200 rounded-none resize-none focus:outline-none focus:border-black bg-transparent placeholder:text-gray-400 text-gray-900"
+                className="w-full h-16 px-0 py-2 border-0 border-b-2 border-gray-300 rounded-none resize-none focus:outline-none focus:border-gray-900 bg-transparent placeholder:text-gray-500 text-gray-900"
               />
             </div>
 
@@ -282,21 +284,21 @@ export function GoalInputForm({ onSubmit, isLoading = false }: GoalInputFormProp
                 disabled={!formData.goal || !formData.timeframe || !formData.dailyTimeAvailable || isLoading}
                 className={`w-full h-12 text-base font-medium rounded-lg transition-all disabled:bg-gray-300 disabled:text-gray-500 ${
                   isLoading 
-                    ? 'bg-gray-100 animate-pulse cursor-not-allowed text-black' 
+                    ? 'bg-gray-200 animate-pulse cursor-not-allowed text-gray-800' 
                     : 'bg-gray-900 hover:bg-gray-800 text-white'
                 }`}
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center gap-3">
                     <div className="relative">
-                      <div className="w-5 h-5 border-2 border-black/30 rounded-full"></div>
-                      <div className="absolute top-0 left-0 w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-5 h-5 border-2 border-gray-400 rounded-full"></div>
+                      <div className="absolute top-0 left-0 w-5 h-5 border-2 border-gray-800 border-t-transparent rounded-full animate-spin"></div>
                     </div>
-                    <span className="animate-pulse text-black">AI正在生成计划</span>
+                    <span className="animate-pulse text-gray-800">AI正在生成计划</span>
                     <div className="flex gap-1">
-                      <div className="w-1 h-1 bg-black rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-1 h-1 bg-black rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-1 h-1 bg-black rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                      <div className="w-1 h-1 bg-gray-800 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-1 h-1 bg-gray-800 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                      <div className="w-1 h-1 bg-gray-800 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                     </div>
                   </div>
                 ) : (

@@ -56,3 +56,58 @@ body {
   color: hsl(var(--foreground));
   font-family: system-ui, -apple-system, sans-serif;
 }
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  /* 确保在移动端文字清晰可见 */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* 优化输入框在移动端的显示 */
+  input, textarea {
+    font-size: 16px; /* 防止iOS缩放 */
+  }
+  
+  /* 优化按钮点击区域 */
+  button {
+    min-height: 44px; /* iOS推荐的最小点击区域 */
+  }
+  
+  /* 优化容器间距 */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* 确保颜色对比度足够 */
+.text-gray-500 {
+  color: #6b7280 !important;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+.text-gray-800 {
+  color: #1f2937 !important;
+}
+
+.text-gray-900 {
+  color: #111827 !important;
+}
+
+/* 优化边框颜色 */
+.border-gray-300 {
+  border-color: #d1d5db !important;
+}
+
+.border-gray-400 {
+  border-color: #9ca3af !important;
+}

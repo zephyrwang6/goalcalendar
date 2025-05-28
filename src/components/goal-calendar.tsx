@@ -1,22 +1,27 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { GoalPlan, DailySchedule } from '@/types/goal'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isSameDay, isToday } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
-import { ChevronLeft, ChevronRight, Calendar, CheckCircle, Circle, Clock, Target } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Calendar, CheckCircle, Circle, Clock, Target, Edit } from 'lucide-react'
 import { cn, formatTimeSlot } from '@/lib/utils'
+import { TaskEditModal } from './task-edit-modal'
+import { CalendarSyncButton } from './calendar-sync-button'
 
 interface GoalCalendarProps {
   goalPlan: GoalPlan
   onTaskComplete?: (taskId: string, date: string) => void
+  onTaskUpdate?: (updatedTask: DailySchedule, originalTask: DailySchedule) => void
 }
 
-export function GoalCalendar({ goalPlan, onTaskComplete }: GoalCalendarProps) {
+export function GoalCalendar({ goalPlan, onTaskComplete, onTaskUpdate }: GoalCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [editingTask, setEditingTask] = useState<DailySchedule | null>(null)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
   // 获取当前月份的所有日期
   const monthDays = useMemo(() => {
@@ -87,19 +92,41 @@ export function GoalCalendar({ goalPlan, onTaskComplete }: GoalCalendarProps) {
 
   const selectedDateTasks = selectedDate ? getTasksForDate(selectedDate) : []
 
+  // 编辑任务
+  const handleEditTask = (task: DailySchedule) => {
+    setEditingTask(task)
+    setIsEditModalOpen(true)
+  }
+
+  // 保存编辑的任务
+  const handleSaveEditedTask = (updatedTask: DailySchedule) => {
+    if (editingTask && onTaskUpdate) {
+      onTaskUpdate(updatedTask, editingTask)
+    }
+    setIsEditModalOpen(false)
+    setEditingTask(null)
+  }
+
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* 目标信息头部 */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Target className="w-6 h-6 text-blue-600" />
-            {goalPlan.goalTitle}
-          </CardTitle>
-          <div className="text-sm text-gray-600 space-y-1">
-            <p>总时长: {goalPlan.totalDuration}</p>
-            <p>开始日期: {goalPlan.startDate}</p>
-            {goalPlan.endDate && <p>预计结束: {goalPlan.endDate}</p>}
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div className="flex-1">
+              <CardTitle className="flex items-center gap-2 mb-3">
+                <Target className="w-6 h-6 text-blue-600" />
+                {goalPlan.goalTitle}
+              </CardTitle>
+              <div className="text-sm text-gray-600 space-y-1">
+                <p>总时长: {goalPlan.totalDuration}</p>
+                <p>开始日期: {goalPlan.startDate}</p>
+                {goalPlan.endDate && <p>预计结束: {goalPlan.endDate}</p>}
+              </div>
+            </div>
+            <div className="md:ml-4">
+              <CalendarSyncButton goalPlan={goalPlan} className="w-full md:w-auto" />
+            </div>
           </div>
         </CardHeader>
       </Card>
@@ -127,7 +154,7 @@ export function GoalCalendar({ goalPlan, onTaskComplete }: GoalCalendarProps) {
             {/* 星期标题 */}
             <div className="grid grid-cols-7 gap-1 mb-2">
               {['日', '一', '二', '三', '四', '五', '六'].map((day, index) => (
-                <div key={index} className="h-8 flex items-center justify-center text-sm font-medium text-gray-500">
+                <div key={index} className="h-10 flex items-center justify-center text-sm font-medium text-gray-500">
                   {day}
                 </div>
               ))}
@@ -137,7 +164,7 @@ export function GoalCalendar({ goalPlan, onTaskComplete }: GoalCalendarProps) {
             <div className="grid grid-cols-7 gap-1">
               {/* 月份开始前的空白 */}
               {Array.from({ length: monthStartDay }, (_, index) => (
-                <div key={`empty-${index}`} className="h-24" />
+                <div key={`empty-${index}`} className="h-16" />
               ))}
 
               {/* 月份日期 */}
@@ -150,7 +177,7 @@ export function GoalCalendar({ goalPlan, onTaskComplete }: GoalCalendarProps) {
                   <div
                     key={date.toISOString()}
                     className={cn(
-                      "h-24 p-1 border border-gray-200 cursor-pointer transition-colors hover:bg-gray-50",
+                      "h-16 p-1 border border-gray-200 cursor-pointer transition-colors hover:bg-gray-50",
                       isSelected && "bg-blue-50 border-blue-300",
                       isCurrentDay && "bg-blue-100 border-blue-400"
                     )}
@@ -168,12 +195,22 @@ export function GoalCalendar({ goalPlan, onTaskComplete }: GoalCalendarProps) {
                           <div
                             key={index}
                             className={cn(
-                              "text-xs px-1 py-0.5 rounded border truncate",
+                              "text-xs px-1 py-0.5 rounded border leading-tight",
                               getTaskTypeStyle(task.type)
                             )}
                             title={task.content}
                           >
-                            {task.content.length > 10 ? `${task.content.slice(0, 10)}...` : task.content}
+                            <div 
+                              className="break-words whitespace-normal"
+                              style={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden'
+                              }}
+                            >
+                              {task.content}
+                            </div>
                           </div>
                         ))}
                         {tasks.length > 2 && (
@@ -224,18 +261,35 @@ export function GoalCalendar({ goalPlan, onTaskComplete }: GoalCalendarProps) {
                             预计时长: {task.duration}分钟
                           </p>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => onTaskComplete?.(task.content, task.date)}
-                          className="ml-2"
-                        >
-                          {task.completed ? (
-                            <CheckCircle className="w-5 h-5 text-green-600" />
-                          ) : (
-                            <Circle className="w-5 h-5 text-gray-400" />
+                        <div className="flex items-center gap-2 ml-2">
+                          {!task.completed && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEditTask(task)}
+                              className="p-1 h-8 w-8 text-gray-500 hover:text-blue-600"
+                              title="修改任务"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
                           )}
-                        </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => onTaskComplete?.(task.content, task.date)}
+                            className={`p-1 h-8 w-8 ${task.completed 
+                              ? 'text-green-600 hover:text-gray-500' 
+                              : 'text-gray-400 hover:text-green-600'
+                            }`}
+                            title={task.completed ? "标记为未完成" : "标记为完成"}
+                          >
+                            {task.completed ? (
+                              <CheckCircle className="w-4 h-4" />
+                            ) : (
+                              <Circle className="w-4 h-4" />
+                            )}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -255,6 +309,17 @@ export function GoalCalendar({ goalPlan, onTaskComplete }: GoalCalendarProps) {
           </CardContent>
         </Card>
       </div>
+
+      {/* 任务编辑弹窗 */}
+      <TaskEditModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false)
+          setEditingTask(null)
+        }}
+        task={editingTask}
+        onSave={handleSaveEditedTask}
+      />
     </div>
   )
 } 

@@ -5,8 +5,8 @@ import { useParams, useRouter } from 'next/navigation'
 import { GoalCalendar } from '@/components/goal-calendar'
 import { Navbar } from '@/components/navbar'
 import { HistoryModal } from '@/components/history-modal'
-import { GoalPlan } from '@/types/goal'
-import { getHistoryPlans } from '@/lib/storage'
+import { GoalPlan, DailySchedule } from '@/types/goal'
+import { getHistoryPlans, saveToHistory } from '@/lib/storage'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 
@@ -42,6 +42,40 @@ export default function PlanPage() {
     // 这里可以实现任务完成的逻辑
     console.log('任务完成:', taskId, date)
     // 实际项目中会更新数据库状态
+  }
+
+  const handleTaskUpdate = (updatedTask: DailySchedule, originalTask: DailySchedule) => {
+    if (!goalPlan) return
+    
+    // 创建更新后的计划副本
+    const updatedPlan = { ...goalPlan }
+    
+    // 遍历所有阶段和任务来找到并更新指定的任务
+    updatedPlan.phases = updatedPlan.phases.map(phase => ({
+      ...phase,
+      tasks: phase.tasks.map(task => ({
+        ...task,
+        dailySchedule: task.dailySchedule.map(schedule => {
+          // 通过日期、内容和时间段来匹配原任务
+          if (schedule.date === originalTask.date && 
+              schedule.content === originalTask.content && 
+              schedule.timeSlot === originalTask.timeSlot) {
+            return updatedTask
+          }
+          return schedule
+        })
+      }))
+    }))
+    
+    // 更新状态
+    setGoalPlan(updatedPlan)
+    
+    // 保存到本地存储
+    saveToHistory(updatedPlan)
+    
+    // 更新历史计划列表
+    const updatedPlans = getHistoryPlans()
+    setHistoryPlans(updatedPlans)
   }
 
   const handleHistoryClick = () => {
@@ -113,6 +147,7 @@ export default function PlanPage() {
             <GoalCalendar 
               goalPlan={goalPlan} 
               onTaskComplete={handleTaskComplete}
+              onTaskUpdate={handleTaskUpdate}
             />
           )}
         </div>

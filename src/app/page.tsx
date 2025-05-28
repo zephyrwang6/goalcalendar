@@ -63,7 +63,7 @@ export default function HomePage() {
     <>
       <Navbar onHistoryClick={handleHistoryClick} onLogoClick={handleLogoClick} />
       <main className="min-h-[calc(100vh-64px)]" style={{ backgroundColor: '#f8f8f7' }}>
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 md:px-6 py-6 md:py-12">
           <div className="flex flex-col items-center justify-center min-h-[calc(80vh-64px)]">
             <GoalInputForm 
               onSubmit={handleGoalSubmit} 
