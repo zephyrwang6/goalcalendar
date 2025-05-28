@@ -17,9 +17,17 @@ export async function generateGoalPlan(goalInput: GoalInput): Promise<GoalPlan> 
 - 目标描述：${goalInput.description || '无'}
 
 请生成一个JSON格式的目标计划，包含：
-1. 目标分解为具体的阶段
-2. 每个阶段的具体任务和时间安排
-3. 重要里程碑
+1. 将目标分解为3-4个阶段
+2. 每个阶段根据时间跨度，拆解多个核心任务
+3. 每个任务包含细分几个可执行的小人物
+3. 每个任务安排合理的日程
+4. 设置重要里程碑
+
+要求：
+- 内容要简洁实用
+- 确保JSON格式完整
+- 任务安排要符合用户的时间框架
+- 每日安排不超过用户的可用时间
 
 JSON格式要求（严格按照此格式）：
 {
@@ -60,7 +68,7 @@ JSON格式要求（严格按照此格式）：
   ]
 }
 
-请确保返回的是有效的JSON格式，不要包含任何其他文本。
+请确保返回的是完整有效的JSON格式，不要包含任何其他文本。
 `
 
     const response = await fetch(DEEPSEEK_API_URL, {
@@ -74,7 +82,7 @@ JSON格式要求（严格按照此格式）：
         messages: [
           {
             role: 'system',
-            content: '你是一个专业的目标规划助手，擅长将大目标分解为可执行的小任务，并制定详细的学习计划。请始终返回JSON格式的响应。'
+            content: '你是一个专业的目标规划助手，擅长将大目标分解为可执行的小任务，并制定详细的学习计划。请始终返回完整的JSON格式响应，确保JSON结构完整且可解析。'
           },
           {
             role: 'user',
@@ -83,7 +91,7 @@ JSON格式要求（严格按照此格式）：
         ],
         stream: false,
         temperature: 0.7,
-        max_tokens: 2000
+        max_tokens: 6000
       })
     })
 
@@ -102,12 +110,33 @@ JSON格式要求（严格按照此格式）：
     let aiPlan: any
     try {
       // 清理可能的markdown代码块标记
-      const cleanContent = content.replace(/```json\s*|\s*```/g, '').trim()
+      let cleanContent = content.replace(/```json\s*|\s*```/g, '').trim()
+      
+      // 检查JSON是否被截断（如果以逗号或不完整的结构结尾）
+      if (!cleanContent.endsWith('}')) {
+        console.warn('检测到JSON可能被截断，尝试修复...')
+        console.warn('原始内容结尾:', cleanContent.slice(-100))
+        throw new Error('AI返回的JSON内容被截断，请稍后重试')
+      }
+      
       aiPlan = JSON.parse(cleanContent)
+      
+      // 验证必要的字段
+      if (!aiPlan.goalTitle || !aiPlan.phases || !Array.isArray(aiPlan.phases)) {
+        throw new Error('AI返回的JSON格式缺少必要字段')
+      }
+      
     } catch (parseError) {
       console.error('JSON解析失败:', parseError)
-      console.error('原始内容:', content)
-      throw new Error('AI返回的内容格式不正确')
+      console.error('原始内容长度:', content.length)
+      console.error('原始内容前200字符:', content.substring(0, 200))
+      console.error('原始内容后200字符:', content.slice(-200))
+      
+      if (content.length >= 5900) {
+        throw new Error('AI返回的格式有误，内容可能被截断。请尝试简化目标描述或稍后重试。')
+      } else {
+        throw new Error('AI返回的格式有误，JSON解析失败。请稍后重试。')
+      }
     }
 
     // 将AI返回的数据转换为完整的GoalPlan
