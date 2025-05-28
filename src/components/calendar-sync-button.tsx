@@ -43,7 +43,7 @@ export function CalendarSyncButton({ goalPlan, className }: CalendarSyncButtonPr
       if (result.success) {
         setShowInstructions(true)
       }
-    } catch (error) {
+    } catch {
       setSyncResult({
         success: false,
         message: '同步失败，请稍后重试'

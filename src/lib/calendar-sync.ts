@@ -1,4 +1,4 @@
-import { GoalPlan, DailySchedule } from '@/types/goal'
+import { GoalPlan } from '@/types/goal'
 
 export interface CalendarEvent {
   title: string
@@ -82,7 +82,7 @@ export function generateICSFile(events: CalendarEvent[], planTitle: string): str
     return text.replace(/[,;\\]/g, '\\$&').replace(/\n/g, '\\n')
   }
   
-  let icsContent = [
+  const icsContent = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'PRODID:-//Goal Calendar//Goal Calendar App//CN',
