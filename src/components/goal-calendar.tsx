@@ -118,7 +118,7 @@ export function GoalCalendar({ goalPlan, onTaskComplete, onTaskUpdate }: GoalCal
                 <Target className="w-6 h-6 text-blue-600" />
                 {goalPlan.goalTitle}
               </CardTitle>
-              <div className="text-sm text-gray-600 space-y-1">
+              <div className="text-sm text-gray-800 space-y-1">
                 <p>总时长: {goalPlan.totalDuration}</p>
                 <p>开始日期: {goalPlan.startDate}</p>
                 {goalPlan.endDate && <p>预计结束: {goalPlan.endDate}</p>}
